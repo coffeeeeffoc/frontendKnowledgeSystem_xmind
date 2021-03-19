@@ -17,4 +17,7 @@
 # API
 ## useState
 ### 实现原理
-  利用闭包，存了一个数组来保存函数的状态，多次调用useState时，按顺序依次调用
+  利用闭包，存了一个数组来保存函数的状态，多次调用useState时，按顺序依次调用。
+  每个节点都有一个FiberNode实例对象，this.memoizedState对象存储状态相关的内容。
+  `this.memoizedState = {memoizedState: 3, baseState: 3, baseQueue: null, queue: {…}, next: {…}}`
+  next指向也是另一个memoizedState对象
