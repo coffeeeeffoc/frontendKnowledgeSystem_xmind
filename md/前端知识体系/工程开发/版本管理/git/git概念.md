@@ -27,3 +27,8 @@
 - `git rm <glob>`  把满足正则表达式的文件 从工作目录中删除，且从staged暂存区删除  例如：`git rm log/\*.log`和`git rm \*~`
 - `git rm --cached <file>`  从staged暂存区删除，但不从工作目录中删除
 - `git mv file_from file_to`  文件改名
+## git别名
+  例子
+  - `git config --global alias.co checkout` 设置co为checkout的别名，`git co`来代表`git checkout`.
+  - `git config --global alias.last 'log -1 HEAD'`  可以用`git last`代表`git log -1 HEAD`.
+  - 命令前面加入 ! 符号，可以执行外部命令。例如，`git config --global alias.visual '!gitk'`,`git visual`代表`gitk`.
