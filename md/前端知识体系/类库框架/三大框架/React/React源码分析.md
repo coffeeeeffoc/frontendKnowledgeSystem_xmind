@@ -4,6 +4,27 @@
 
 ### [合成事件机制原理](https://segmentfault.com/a/1190000039108951)
 
+## 批量更新
+- v17及以下
+	在合成事件中（比如onClick事件），多次的setState会合并，只触发一次render。
+	Promise、setTimeout、原生事件、以及其他事件中，则每次setState都会同步触发一次render。
+- v18
+  - [Automatic batching](https://github.com/reactwg/react-18/discussions/21)
+  - 不想自动批量更新怎么办？
+  - ReactDOM.flushSync(() => {});
+- ReactDOM.unstable_batchedUpdates
+  - 在v18中继续生效可以使用，不过由于自动批量更新，所以没必要使用。
+## [startTransition](https://github.com/reactwg/react-18/discussions/41)
+- 目的
+  - 解决立即响应和延迟响应的矛盾，优雅解决延迟响应
+    - 与setTimeout、throttle、debounce对比
+      - 前者能更早的响应
+        - 因为前者根据实际情况调度，而后三者都是指定时间，且指定的时间不太好控制
+      - 前者不会后续卡顿；后三者，当延迟到真正执行的时候，依然有卡顿的问题
+      - 前者在react内部处理，后者需开发者自行编码处理
+- 使用场景
+  - 减少rerender依然是主流优化方案，startTransition只是补充
+  - 延迟响应的场合，比如缓慢渲染，网络请求等
 ## [优先级](https://segmentfault.com/a/1190000038947307)
 
 ### 事件优先级
