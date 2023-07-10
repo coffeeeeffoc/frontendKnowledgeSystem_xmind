@@ -1,3 +1,4 @@
+[toc]
 # HTTP
 
 ## 缓存
@@ -121,4 +122,40 @@ https://mp.weixin.qq.com/s/qOMO0LIdA47j3RjhbCWUEQ?utm_source=caibaojian.com
 - 缓存存储策略
 - 缓存过期策略
 - 缓存比对策略
+
+## 三次握手，四次挥手
+https://zhuanlan.zhihu.com/p/53374516
+# HTTPS
+https://draveness.me/whys-the-design-https-latency/
+
+网景（Netscape）在 1994 年设计了 HTTPS 协议，使用安全套接字层（Secure Sockets Layer，SSL）保证数据传输的安全1，随着传输层安全协议（Transport Layer Security，TLS）的发展，目前我们已经使用 TLS 取代了废弃的 SSL 协议，不过仍然使用 SSL 证书一词。
+- TCP 协议 — 通信双方通过三次握手建立 TCP 连接；
+- TLS 协议 — 通信双方通过四次握手建立 TLS 连接；
+  - TLS 握手的关键在于利用通信双方生成的随机字符串和服务端的公钥生成一个双方经过协商后的密钥，通信的双方可以使用这个对称的密钥加密消息防止中间人的监听和攻击，保证通信的安全
+- HTTP 协议 — 客户端向服务端发送请求，服务端发回响应；
+- TFO快启 （TCP Fast Open，TFO）- 在目前的大多数场景下，三次握手也是无法避免的，不过在 2014 年提出TFO，可以在某些场景下通过一次通信建立 TCP 连接。TCP 快启策略使用存储在客户端的 TFO Cookie 与服务端快速建立连接。TCP 连接的客户端向服务端发送 SYN 消息时会携带快启选项，服务端会生成一个 Cookie 并将其发送至客户端，客户端会缓存该 Cookie，当其与服务端重新建立连接时，它会使用存储的 Cookie 直接建立 TCP 连接，服务端验证 Cookie 后会向客户端发送 SYN 和 ACK 并开始传输数据，这也就能减少通信的次数。
+# HTTP2
+
+速度快的原理
+- **二进制分帧**
+  - 格式的编码 ，其中 HTTP1.x 的首部信息会被封装到 HEADER frame，而相应的 Request Body 则封装到 DATA frame 里面。
+  - 在二进制分帧层中， HTTP/2 会将所有传输的信息分割为更小的消息和帧（frame）,并对它们采用`二进制`格式的编码 ，其中 HTTP1.x 的首部信息会被封装到 HEADER frame，而相应的 Request Body 则封装到 DATA frame 里面。
+## 特性
+- 多路复用
+- 可以设置请求的优先级
+- 首部压缩
+- 服务端推送
+  
+# HTTP1.1 VS HTTP2
+http1.1
+影响 HTTP/1.1 效率的三个主要因素
+- TCP 的慢启动
+- 多条 TCP 连接竞争带宽
+- 队头阻塞
+
+http2
+- 多路复用
+- 可以设置请求的优先级
+- 首部压缩
+- 服务端推送
 

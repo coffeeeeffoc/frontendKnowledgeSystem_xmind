@@ -47,6 +47,11 @@
 		- 打包优化
 		- 资源管理
 		- 注入环境变量
+### 插件
+#### UglifyJsPlugin
+去掉无效代码、去掉日志输入代码、缩短变量名
+#### uglify-webpack-plugin
+直接压缩压缩ES6代码
 
 ### mode
 

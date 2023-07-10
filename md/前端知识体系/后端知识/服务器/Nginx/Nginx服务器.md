@@ -80,8 +80,47 @@ Content-Type is not allowed by Access-Control-Allow-Headers in preflight respons
 发送"预检请求"时，需要用到方法 OPTIONS ,所以服务器需要允许该方法。
 
 ### 负载均衡
-
-- upstream apiServer { 
+参考链接：https://blog.csdn.net/xyang81/article/details/51702900
+nginx官网链接：http://nginx.org/en/docs/http/load_balancing.html
+- 内置负载策略
+  - 三种负载策略
+    - `round-robin`轮循（默认）
+        Nginx根据请求次数，将每个请求均匀分配到每台服务器
+    - `least-connected`最少连接
+        `least_conn`指令来指定采用此策略
+        将请求分配给连接数最少的服务器。Nginx会统计哪些服务器的连接数最少。
+    - `ip-hash`IP Hash
+        `ip_hash`指令来指定采用此策略
+        绑定处理请求的服务器。第一次请求时，根据该客户端的IP算出一个HASH值，将请求分配到集群中的某一台服务器上。后面该客户端的所有请求，都将通过HASH算法，找到之前处理这台客户端请求的服务器，然后将请求交给它来处理。
+  - 参数
+    - weight 权重，默认为1。
+    - max_fails 最大失败次数，默认为1。超过最大次数后，在fail_timeout时间内，新的请求将不会分配给这台机器。
+    - fail_timeout 失败后的无效时间，默认为10秒。某台Server达到max_fails次失败请求后，在fail_timeout期间内，nginx会认为这台Server暂时不可用，不会将请求分配给它
+    - backup 备份机，所有服务器挂了之后才会生效
+    - down 不可用，标识某一台server不可用。
+    - max_conns 最大连接数量，默认为0。超过这个数量，将不会分配新的连接给它。默认为0，表示不限制。
+    - resolve 指定域名解析
+    ```
+    http {
+        upstream a {
+            server 192.168.0.100:8080 weight=2 max_fails=3 fail_timeout=15;
+            server 192.168.0.100:8081 weight=1;
+            server 192.168.0.100:8082 backup;
+            server 192.168.0.100:8083 down;
+            server 192.168.0.100:8084 max_conns=1000;
+            server example.com resolve;
+        }
+    }
+    ```
+- 第三方负载策略
+    貌似都要编译nginx源码来做的
+  - fair
+  - url-hash
+```
+upstream apiServer {
+    #此处设置指令，指定所采取的负载策略
+    #least_conn;
+    #ip_hash;
     server 10.0.0.80:5000;  # 如果需要权重加 weight=数字
     server 10.0.0.81:5000;
 }
@@ -93,7 +132,7 @@ server {
         proxy_pass   http://apiServer;
     }
 }
-
+```
 ### 开启gzip压缩
 
 - http {

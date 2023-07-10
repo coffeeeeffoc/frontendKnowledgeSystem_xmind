@@ -1,4 +1,28 @@
+[toc]
 # React源码分析
+
+## react生命周期
+[生命周期网站](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+
+- render
+- pre-commit
+- commit
+  - 文件目录：`source_code\react\packages\react-reconciler\src\ReactFiberWorkLoop.new.js`,Line:1939
+  - before-mutation
+  - mutation
+  - layout
+## hooks
+### [从源码角度看 useEffect、useLayoutEffect](https://juejin.cn/post/6951754466009825310#heading-6)
+https://juejin.cn/post/6951754466009825310#heading-6
+- 对于 useLayoutEffect hook，以同步的方式执行。
+  - 在 commit - Mutation 阶段会遍历执行所有的 useLayoutEffect hook 的销毁函数（更新渲染阶段）；
+  - 在 commit - Layout 阶段会遍历执行所有的 useLayoutEffect hook 的回调函数（初渲染和更新渲染阶段，更新渲染阶段执行的前提是满足依赖项不相同）。
+- 对于 useEffect hook，以异步调度的方式执行。
+
+  - 在 commit - beforeMutation 阶段前调用 scheduleCallback 将 flustPassiveEffects 作为回调，开启一次异步调度 useEffect 的请求；
+  - 在 commit - layout 阶段将需要执行的 useEffect 加入到这两个全局变量中：pendingPassiveHookEffectsUnmount 和 pendingPassiveHookEffectsMount；
+  - 在 commit - layout 阶段之后，将 root（effectList） 保存到全局变量 rootWithPendingPassiveEffects 上；
+  - 当 scheduleCallback 执行 flustPassiveEffects 时，执行 useEffect 的销毁函数、useEffect 的回调函数
 
 ## 事件
 

@@ -12,6 +12,9 @@
 - 渲染完执行。渲染完毕且其他js执行完毕才执行
 - 保证执行顺序与加载顺序一致
 
+### async vs defer
+https://stackoverflow.com/a/39711009
+
 ## ES6模块加载
 
 ### type="module"属性
